@@ -1,3 +1,7 @@
+## NOTE: I can't be bothered to figure out a CLI, 
+## so you have to modify code in here if you want to use a different file or add constraints. 
+## Sorry.
+
 import csv
 
 def is_compatibility_ideograph(unicode_hex):
@@ -26,57 +30,54 @@ def is_compatibility_ideograph(unicode_hex):
     )
 
 # https://github.com/cjkvi/cjkvi-ids
-ids_file = "./cjkvi-ids/ids.txt"
-dest_file = "./ambiguities_with_ucs_col.tsv"
+ids_file = "./cjkvi-ids/ids-cdp.txt"       ## CHANGE THIS LINE FOR SOURCE FILE
+dest_file = "./ambiguities-ids-cdp-uro.tsv"    ## CHANGE THIS LINE FOR OUTPUT DESTINATION
 with open(ids_file, 'r', encoding='UTF-8') as f:
     tsv = csv.reader(f, delimiter="\t", quotechar='"')
-    ambiguous_list = set()
-    ids_map = dict()
+    # ids_dict is a dict from IDS to list of Annotated Characters # Annotated Character = Character + UCS Columns
+    ids_dict = dict()
     for row in tsv:
+        # exclude "comment" rows
+        if row[0] == ";;" or row[0] == "#":
+            continue
+        
         if len(row) >= 2:
-            # TODO how do you put a list of tuples?
-            (unicode_encoding, char) = row[0:2]
-            idss = row[2:]
-            # exclude characters in the compatibility region
-            # under the assumption that we don't care about z-variants in the comptaibility region
-            if is_compatibility_ideograph( int(unicode_encoding[2:], 16) ):
+            (codepoint, char, *idss) = row
+            if (codepoint[0:2] == "U+"):
+                codepoint = int(codepoint[2:], 16)
+                # choose to exclude compatibility ideographs
+                if is_compatibility_ideograph(codepoint):
+                    continue
+                # choose to restrict to CJK Unified Ideographs block U+4E00..U+9FFF
+                                        ## CHANGE THESE LINES IF YOU DON'T WANT TO LIMIT
+                codepoint_restriction = range(0x4E00, 0xA000)
+                if codepoint not in codepoint_restriction:
+                    continue
+            else:   ## CHANGE IF you don't want to skip over CDP characters. this branch skips over CDP characters
                 continue
-            for it in idss:
-                splitted = it.split("[")
+
+            for annotated_ids in idss: # it has the form  ⿱⿻臼丨又[GJK] if there are multiple variants, or just ⿰日丙
+                splitted = annotated_ids.split("[")
                 ids = splitted[0] # e.g. ⿱⿻臼丨又[GJK] to ⿱⿻臼丨又
 
                 annotated_char = char
                 if len(splitted) >= 2:
                     ucs_cols = splitted[1]   # e.g. ⿱⿻臼丨又[GJK] to GJK]
                     ucs_cols = ucs_cols[:-1] # then to GJK
-                    annotated_char = char + ucs_cols
+                    delimiter = ','
+                    annotated_char = f"{char}{delimiter}{ucs_cols}"
                 
-                if ids in ids_map:
-                    ids_map[ids].append( annotated_char )
-                else:
-                    ids_map[ids] = list()
-                    ids_map[ids].append( annotated_char )
+                if ids not in ids_dict:
+                    ids_dict[ids] = list()
+                ids_dict[ids].append(annotated_char)
     count = 0
     with open(dest_file, 'w', encoding='UTF-8', newline='') as out:
         writer = csv.writer(out, delimiter='\t', lineterminator='\n')
-        for ids in ids_map:
-            if len( ids_map[ids] ) > 1:
+        for ids in ids_dict:
+            if len( ids_dict[ids] ) > 1:
                 count += 1
-                writer.writerow([ ids, ids_map[ids] ])
-    print(f'number of ambiguous IDSs: count')
+                print( [ids] + [char for char in ids_dict[ids] ] )
+                writer.writerow( [ids] + [char for char in ids_dict[ids]] )
+    print(f'number of ambiguous IDSs: {count}')
 
-# issues:
-# i still don't really understand how han unification works.
-#   for example, sometimes two glyphs differ very slightly, like what I would assume is variant. like the grass head radical being broken vs not.
-#       but the decomposition is the same, even though i would expect it to be using a variant IDC because of the variation in the glyph
-#       do I need a special font?
-#   and I'm not sure if it's totally "correct" for me to just skip the compatibility region.
-# I don't know why the same IDC (at least, equivalent according to Python dicts) is sometimes displayed as tofu and sometimes not
-
-
-# 327 if I skip compatibility ideographs
-# 827 if I don't.
-# so there are 500 compatibility ideographs? idk
-# so some times there's only a collision for certain variants.
-# I think I'm interested in AMBIGUITIES, so imagine you're only using one variant.
-# 
+    # ⿱⑧山 𡸭   𡸸 T
