@@ -1,3 +1,20 @@
+
+# Ambiguous Ideographic Description Sequences
+
+IDS (ideographic description sequences) are sequences of IDCs (ideographic description characters) that describe a CJK character's shape. 
+For example: the IDS for 偍 is ⿰亻是. 
+
+IDSs can be ambiguous; different characters can have the same IDS. 
+For example: ⿱一一 is the IDS for
+- 二 (U+4E8C, 	"two")
+- 𠄞 (U+2011E,	"ancient form of 上 ("up")")
+- 𠄟 (U+2011F,	"ancient form of 下 ("down")")
+- 𠄠 (U+20120,	"variant of 二"). 
+
+Or, for a more common example: ⿱十一 describes both 土 (U+571F, "dirt"), and 士 (U+58EB, "scholar").
+
+([Wikipedia page for Ideographic Description Sequences](https://en.wikipedia.org/wiki/Chinese_character_description_languages#Ideographic_Description_Sequences))
+
 ## Summary
 
 - `ambiguity-finder.py` Python script used to generate the `ambiguities-ids-*.tsv` files. I didn't write a CLI, you have to edit it yourself.
@@ -6,6 +23,7 @@ The `ambiguities-ids-*.tsv` files contain the results, where each row is formatt
 ```
 IDS	FIRST_CHARACTER,UCS_COLUMN	SECOND_CHARACTER,UCS_COLUMN
 ```
+(sometimes there is no value for UCS_COLUMN, in which case its blank and there is no comma).
 
 - `ambiguities-ids-cdp.tsv`IDS collisions among all characters from `./cjkvi-ids/ids-cdp.txt`, which uses PUA characters for IDCs missing from Unicode
 - `ambiguities-ids-cdp-uro.tsv` same as above, but only CJK Unified Ideographs block Unicode characters
@@ -17,22 +35,6 @@ The following files are probably less relevant to finding IDS collisions
 - `notes-on-unihan.md` personal notes I took on Han Unification by Unicode, stuff like what z-variants are
 
 Data is sourced from https://github.com/cjkvi/cjkvi-ids. Go there for more explanation and links. They credit the [CHISE project](https://www.chise.org) for `ids.txt`.
-
-# Ambgiguous Ideographic Description Sequences
-
-IDS (ideographic description sequences) are sequences of IDCs (ideographic description characters) that describe a CJK character's shape. 
-For example: the IDS for 偍 is ⿰亻是. 
-
-IDSs are can be ambiguous; different characters can have the same IDS. 
-For example: ⿱一一 is the IDS for
-- 二 (U+4E8C, 	"two")
-- 𠄞 (U+2011E,	"ancient form of 上 ("up")")
-- 𠄟 (U+2011F,	"ancient form of 下 ("down")")
-- 𠄠 (U+20120,	"variant of 二"). 
-
-Or, for a more common example: ⿱十一 describes both 土 (U+571F, "dirt"), and 士 (U+58EB, "scholar").
-
-([Wikipedia page for Ideographic Description Sequences](https://en.wikipedia.org/wiki/Chinese_character_description_languages#Ideographic_Description_Sequences))
 
 ## Looking for all the ambiguous IDSs
 
@@ -50,6 +52,26 @@ At this point, I also decided to clean up the formatting at this point: tabs to 
 
 I'm also curious as to what the *common* collisions are, so I reran the script but only analyzing characters within the CJK Unified Ideographs Unicode block, i.e. U+4E00..U+9FFF. The result is `ambiguities-ids-cdp-uro.tsv` (URO stands for [Unified Repertoire and Ordering](https://en.wikipedia.org/wiki/CJK_Unified_Ideographs_(Unicode_block))).
 
-Looking at it, I SEE THAT SOME of the characters are just *different*, like a radical just looks different, but they share the IDC anyways. I wonder how that works. Maybe UCS does not properly encode the variant. I guess I should make a final list of the ones that look to me to be obviously IDS collisions and not just a weird choice of radicals, to be taken with a large grain of salt because I don't know what differences are meaningful culturally/semantically.
+### Commentary
 
-Unfortunately, some characters might be more common in one language and very rare in another, so some of the conflicts in the CJK Unified Ideographs Unicode block might be relatively unambiguous in practice. I guess one use case of this would be if you're designing a shape-based input method. Then conflicts may or may not be a problem. blah i dunno.
+Looking at `ambiguities-ids-cdp-uro.tsv`, there are cases that I want to ignore. I'm only interested in the case where IDSs don't adequately specify the positioning of components.
+
+- an IDC represents multiple shapes
+
+For example: ⿰亻具 = 俱 (U+4FF1) = 倶 (U+5036). In the font I'm using, 具 only appears in 倶 (U+5036). I'm not interested in ambiguities caused by Unicode characters used as IDCs having variant shapes.
+
+- one language's variant of a character may be perfectly identical to another character
+
+Ex: ⿱竹㓣 = 劄 (U+5284) (Taiwan, Hong Kong, and Macau) = 箚 (U+7B9A). IDSs unambiguously describe the shape of the characters in this case, though the semantics are different.
+
+- the IDS given in ids.txt is erroneous
+
+I think the IDS ⿰女⿺免生 for 嬎 (U+5B0E) and 嬔 (U+5B14) (Taiwan, Hong Kong) might be wrong in that 免 is not the same as 免 is distinct from 兔. Or I might have the wrong font. Not sure
+
+- I might want to ignore cross-language z-variants.
+
+If someone designs an input method for a specific language, and were using IDSs or a derived system, then some ambiguities could be disambiguated by the choice of language. OTOH, it seems that part of the motivation of using a graphical system is the ability to, e.g., use the same system for traditional and simplified characters. Also, some of the z-variants are obsolete.
+
+In `categorization-ambiguities-ids-cdp-uro.txt`, I have the contents of `ambiguities-ids-cdp-uro.tsv` but manually reorganized by whether it the ambiguity is like (土 vs. 士), is like (俱 vs. 倶), or is like (劄 (HT) vs. 箚). I'm only doing this based on appearance with (a Japanese font), and I'm not checking super thoroughly if the variants exist or not.
+
+I was thinking that ambiguous IDSs might be useful information if someone were to design an input method or automated typeface design. idk
