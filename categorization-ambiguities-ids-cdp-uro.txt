@@ -1,0 +1,44 @@
+case: what I want
+⿱丨一	丄	亠,J
+⿵冂㐅	冈	罓
+⿻十丨	卄	艹,GJ
+⿱品山	喦	嵒
+⿱十一	土	士
+⿷王丶	玉	玊
+
+case: identical shape
+⿱竹㓣	劄,HT	箚
+⿰月分	朌	肦,JK
+⿰月出	朏	胐,GK
+⿰月句	朐	胊,GK
+⿰月兆	朓	脁,GK
+⿰月夋	朘	脧,GJK
+⿰月童	朣	膧,GK
+⿰木告	梏,GTKV	梏,J
+⿰火昷	煴	熅,K
+⿰石薄	礡,O	礴,GK
+⿰耳告	聕,GT	聕,K
+⿰言䍃	謠	謡,G
+⿺辶䍃	遙	遥,G
+⿱埶馬	騺,O	驇
+
+case: single IDC represents multiple shapes
+⿰亻具	俱	倶
+⿰亻直	値	值
+⿱直心	悳	惪
+⿰扌𢆍	挿	揷
+⿰扌䍃	搖	摇
+⿰日免	晚	晩
+⿰木殺	榝	樧
+⿰壳殳	殻	殼
+⿰氵穀	濲	瀔
+⿱巸灬	煕	熙
+⿰王䍃	瑤	瑶
+⿰⿱水廾頁	頮	颒
+⿵鬥斲	鬬	鬭
+
+case: erroneous IDS in ids.txt / unsure
+⿰女⿺免生	嬎	嬔,HT
+⿱竹衰	簑	簔
+⿰糹者	緒,GT	緖,GT
+⿰糸者	緒,J	緖,JK
