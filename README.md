@@ -14,6 +14,7 @@ The following files are probably less relevant to finding IDS collisions
 
 - `ambiguities-ids.tsv` IDS collisions among all characters from `./cjkvi-ids/ids.txt`, which uses encircled numerals for missing IDCs
 - `ambiguities-ids-no-ucs.tsv` same as above, but without UCS Column (i.e. GTJKV) information, which to my understanding represents regional/language variants.
+- `notes-on-unihan.md` personal notes I took on Han Unification by Unicode, stuff like what z-variants are
 
 Data is sourced from https://github.com/cjkvi/cjkvi-ids. Go there for more explanation and links. They credit the [CHISE project](https://www.chise.org) for `ids.txt`.
 
@@ -47,6 +48,8 @@ Some description characters are not in Unicode. `ids.txt` handles this by repres
 
 At this point, I also decided to clean up the formatting at this point: tabs to separate, commas to separate the UCS Column from the charatcter. I'm leaving the other files with the default Python pretty printing because I don't think they're interesting.
 
-I'm also curious as to what the *common* collisions are, so I reran the script but only analyzing characters within the CJK Unified Ideographs Unicode block, i.e. U+4E00..U+9FFF. The result is `ambiguities-ids-cdp-uro.tsv` (URO stands for [Unified Repertoire and Ordering](https://en.wikipedia.org/wiki/CJK_Unified_Ideographs_(Unicode_block))). 
+I'm also curious as to what the *common* collisions are, so I reran the script but only analyzing characters within the CJK Unified Ideographs Unicode block, i.e. U+4E00..U+9FFF. The result is `ambiguities-ids-cdp-uro.tsv` (URO stands for [Unified Repertoire and Ordering](https://en.wikipedia.org/wiki/CJK_Unified_Ideographs_(Unicode_block))).
+
+Looking at it, I SEE THAT SOME of the characters are just *different*, like a radical just looks different, but they share the IDC anyways. I wonder how that works. Maybe UCS does not properly encode the variant. I guess I should make a final list of the ones that look to me to be obviously IDS collisions and not just a weird choice of radicals, to be taken with a large grain of salt because I don't know what differences are meaningful culturally/semantically.
 
 Unfortunately, some characters might be more common in one language and very rare in another, so some of the conflicts in the CJK Unified Ideographs Unicode block might be relatively unambiguous in practice. I guess one use case of this would be if you're designing a shape-based input method. Then conflicts may or may not be a problem. blah i dunno.

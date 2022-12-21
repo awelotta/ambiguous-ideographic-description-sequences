@@ -1,4 +1,4 @@
-# unihan
+# Unihan
 
 x-axis: meaning
 y-axis: major shape differences (e.g. simplified vs. traditional)
@@ -9,7 +9,7 @@ and language-markup should deal with z-variants.
 
 reasons for z-variants in Unicode
 - to support **round-trip** compatibility. (This also motivates some duplicates, if some earlier encoding had duplicates.)
-- others? support for mobile devices?
+- others? support for low-memory devices?
 - sometimes "z-variants" are considered significant in some contexts but not others. for example,
 	- in Japan, place names tend to be conservative. Unicode® Technical Standard #37, says to use variant selectors, which are special characters in Unicode
 
