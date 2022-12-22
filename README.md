@@ -27,6 +27,7 @@ IDS	FIRST_CHARACTER,UCS_COLUMN	SECOND_CHARACTER,UCS_COLUMN
 
 - `ambiguities-ids-cdp.tsv`IDS collisions among all characters from `./cjkvi-ids/ids-cdp.txt`, which uses PUA characters for IDCs missing from Unicode
 - `ambiguities-ids-cdp-uro.tsv` same as above, but only CJK Unified Ideographs block Unicode characters
+- `categorization-ambiguities-ids-cdp-uro.txt` same as `*-uro.tsv`, but manually organized by type of collision.
 
 The following files are probably less relevant to finding IDS collisions
 
