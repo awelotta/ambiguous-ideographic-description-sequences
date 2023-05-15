@@ -2,7 +2,6 @@ case: what I want
 ⿱丨一	丄	亠,J
 ⿵冂㐅	冈	罓
 ⿻十丨	卄	艹,GJ
-⿱品山	喦	嵒
 ⿱十一	土	士
 ⿷王丶	玉	玊
 
@@ -21,6 +20,7 @@ case: identical shape
 ⿰言䍃	謠	謡,G
 ⿺辶䍃	遙	遥,G
 ⿱埶馬	騺,O	驇
+⿰女⿺免生	嬎	嬔,HT
 
 case: single IDC represents multiple shapes
 ⿰亻具	俱	倶
@@ -37,8 +37,10 @@ case: single IDC represents multiple shapes
 ⿰⿱水廾頁	頮	颒
 ⿵鬥斲	鬬	鬭
 
-case: erroneous IDS in ids.txt / unsure
-⿰女⿺免生	嬎	嬔,HT
-⿱竹衰	簑	簔
+case: identical shape AND single IDC represents multiple shapes
 ⿰糹者	緒,GT	緖,GT
 ⿰糸者	緒,J	緖,JK
+
+case: erroneous IDS in ids.txt / no good way to decompose
+⿱竹衰	簑	簔
+⿱品山	喦	嵒

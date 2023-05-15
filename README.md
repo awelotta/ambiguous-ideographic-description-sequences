@@ -59,20 +59,28 @@ Looking at `ambiguities-ids-cdp-uro.tsv`, there are cases that I want to ignore.
 
 - an IDC represents multiple shapes
 
-For example: ⿰亻具 = 俱 (U+4FF1) = 倶 (U+5036). In the font I'm using, 具 only appears in 倶 (U+5036). I'm not interested in ambiguities caused by Unicode characters used as IDCs having variant shapes.
+For example: ⿰亻具 = 俱 (U+4FF1) = 倶 (U+5036). The character 具, which is being used as an IDC, has two different shapes: <span lang="zh">具</span> (China), <span lang="ja">具</span> (Japanese). I'm not interested in ambiguities caused by Unicode characters used as IDCs having variant shapes.
 
 - one language's variant of a character may be perfectly identical to another character
 
-Ex: ⿱竹㓣 = 劄 (U+5284) (Taiwan, Hong Kong, and Macau) = 箚 (U+7B9A). IDSs unambiguously describe the shape of the characters in this case, though the semantics are different.
+Ex: ⿱竹㓣 = <span lang="zh-TW">劄 (U+5284)</span> (Taiwan, Hong Kong, and Macau) = 箚 (U+7B9A). IDSs are sufficient in this case because they unambiguously describe the shape of the characters in this case, though the codepoints are different.
 
 - the IDS given in ids.txt is erroneous
 
-I think the IDS ⿰女⿺免生 for 嬎 (U+5B0E) and 嬔 (U+5B14) (Taiwan, Hong Kong) might be wrong in that 免 is not the same as 免 is distinct from 兔. Or I might have the wrong font. Not sure
+Ex: possibly ⿱竹衰 = 簑 (U+7C11) = 簔 (U+7C14). Wiktionary says that the decomposition is ⿱𥫗𮕩. I think the IDC is simply not encoded (in Unicode or CDP).
+
+Ex 2: possibly ⿱品山 喦 (U+55A6) = 嵒 (U+5D52). Perhaps the 喦 (U+55A6) would be better described as ⿻品山, similar to 坐 = ⿻土从. This new IDS would have no collision, though from the standpoint of using IDCs for automatic glyph rendering, the graphical meaning of ⿻ is very vague.
+
+These are the only two arguably erroneous IDSs in the CJK Unified Ideographs Unicode block.
 
 - I might want to ignore cross-language z-variants.
 
 If someone designs an input method for a specific language, and were using IDSs or a derived system, then some ambiguities could be disambiguated by the choice of language. OTOH, it seems that part of the motivation of using a graphical system is the ability to, e.g., use the same system for traditional and simplified characters. Also, some of the z-variants are obsolete.
 
-In `categorization-ambiguities-ids-cdp-uro.txt`, I have the contents of `ambiguities-ids-cdp-uro.tsv` but manually reorganized by whether it the ambiguity is like (土 vs. 士), is like (俱 vs. 倶), or is like (劄 (HT) vs. 箚). I'm only doing this based on appearance with (a Japanese font), and I'm not checking super thoroughly if the variants exist or not.
+In `categorization-ambiguities-ids-cdp-uro.txt`, I have the contents of `ambiguities-ids-cdp-uro.tsv` but manually reorganized by whether it the ambiguity is like (土 vs. 士), is like (俱 vs. 倶), or is like (<span lang="zh-TW">劄 (HT) vs. 箚). I likely made some errors.
 
-I was thinking that ambiguous IDSs might be useful information if someone were to design an input method or automated typeface design. idk
+I was thinking that ambiguous IDSs might be useful information if someone were to design an input method or automated typeface design.
+
+---
+
+todo: create ambiguities list in as a Markdown file with `lang` tags so that the variant is actually displayed. Write more about what kind of ambiguities are present, and think about disambiguating methods and test them. Clean up this `README`
