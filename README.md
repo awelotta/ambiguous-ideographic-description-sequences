@@ -53,6 +53,13 @@ At this point, I also decided to clean up the formatting at this point: tabs to 
 
 I'm also curious as to what the *common* collisions are, so I reran the script but only analyzing characters within the CJK Unified Ideographs Unicode block, i.e. U+4E00..U+9FFF. The result is `ambiguities-ids-cdp-uro.tsv` (URO stands for [Unified Repertoire and Ordering](https://en.wikipedia.org/wiki/CJK_Unified_Ideographs_(Unicode_block))).
 
+Edit:
+iirc I just compared the IDSs as if they were text, but I should redo this with proper IDS normalization. For example, sometimes a single form can be given different decompositions per region, based on the regional forms of the components. Example (due to Andrew West):
+
+> U+7315 猕 is described as ⿰犭弥 for (G) and ⿰犭⿰弓尔 for (T), even though the actual glyph forms are the same, because the	(T) glyph form does not match the expected source form, and so the decomposition of 弥 to ⿰弓尔 needs to be given to indicate the actual glyph form.
+
+Also I should use a more-up-to-date source.
+
 ### Commentary
 
 Looking at `ambiguities-ids-cdp-uro.tsv`, there are cases that I want to ignore. I'm only interested in the case where IDSs don't adequately specify the positioning of components.
